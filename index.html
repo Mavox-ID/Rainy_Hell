@@ -1,0 +1,605 @@
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rainy Hell — Distributor</title>
+  <meta name="description" content="Rainy Hell — clean distributor landing page with audio previews and downloads." />
+
+  <link rel="icon" type="image/png" href="icon.png" />
+
+  <meta property="og:title" content="Rainy Hell — Official Distributor" />
+  <meta property="og:description" content="Listen to Rainy Hell on Spotify, Apple Music, YouTube, Amazon Music, and more." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://rainyhell.pp.ua" />
+  <meta property="og:image" content="artist.jpg" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Rainy Hell — Official Distributor" />
+  <meta name="twitter:description" content="Listen to Rainy Hell on all major streaming platforms." />
+  <meta name="twitter:image" content="artist.jpg" />
+
+  <meta name="keywords" content="Rainy Hell, music, distributor, Spotify, Apple Music, YouTube, Amazon, instrumental, audio drops, new music" />
+  
+  <meta name="theme-color" content="#07121a" />
+</head>
+
+  <style>
+    :root{
+      --bg:#07121a;
+      --panel:#0f1b26;
+      --glass: rgba(255,255,255,0.03);
+      --accent1:#6fe8ff;
+      --accent2:#c47bff;
+      --text:#e9f3ff;
+      --muted:#9fb1c9;
+      --max:1200px;
+      --radius:16px;
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#06121a);color:var(--text);-webkit-font-smoothing:antialiased}
+    .wrap{max-width:var(--max);margin:36px auto;padding:28px;display:flex;flex-direction:column;gap:20px}
+    header{display:flex;justify-content:space-between;align-items:center;gap:18px}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:78px;height:78px;border-radius:14px;overflow:hidden;display:grid;place-items:center;background:var(--panel);box-shadow:0 12px 40px rgba(0,0,0,0.6)}
+    .logo img{width:100%;height:100%;object-fit:cover}
+    h1{font-size:22px;margin:0}
+    .sub{color:var(--muted);font-size:13px}
+
+    main{display:grid;grid-template-columns:1fr 420px;gap:26px;align-items:start}
+    .left{background:linear-gradient(180deg,var(--panel),rgba(15,27,38,0.9));border-radius:18px;padding:22px;box-shadow:0 20px 60px rgba(2,6,23,0.6)}
+    .player-row{display:flex;gap:18px;align-items:center}
+    .cover{width:160px;height:160px;border-radius:14px;overflow:hidden;flex:0 0 160px;border:1px solid rgba(255,255,255,0.04)}
+    .cover img{width:100%;height:100%;object-fit:cover;display:block}
+    .meta{flex:1;display:flex;flex-direction:column;gap:8px}
+    .meta h2{margin:0;font-size:22px;letter-spacing:0.2px}
+    .meta p{margin:0;color:var(--muted)}
+
+    .controls{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+    .control-top{display:flex;gap:12px;align-items:center}
+    .big-btn{width:54px;height:54px;border-radius:12px;border:0;background:linear-gradient(90deg,var(--accent1),var(--accent2));display:grid;place-items:center;color:#02101a;font-weight:800;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,0.6)}
+    .small-btn {
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--text);
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: all 0.2s ease;
+}
+.small-btn:hover {
+  background: rgba(255,255,255,0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+    .player-info{display:flex;flex-direction:column;gap:6px}
+
+    .progress-wrap{width:100%;display:flex;flex-direction:column;gap:8px}
+    .time-row{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}
+    .progress{height:8px;border-radius:999px;background:rgba(255,255,255,0.04);overflow:hidden;position:relative;cursor:pointer}
+    .progress > .bar{height:100%;width:0%;background:linear-gradient(90deg,var(--accent1),var(--accent2));box-shadow:0 6px 20px rgba(90,120,255,0.04);transition:width 120ms linear}
+
+    .viz{margin-top:16px;border-radius:12px;overflow:hidden;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:12px}
+    canvas.viz-canvas{width:100%;height:120px;display:block}
+
+    .tracks{margin-top:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .track{background:var(--glass);padding:10px;border-radius:10px;display:flex;gap:10px;align-items:center;cursor:pointer;transition:transform 220ms, box-shadow 220ms}
+    .track:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(1,6,20,0.6)}
+    .t-thumb{width:60px;height:60px;border-radius:8px;overflow:hidden;flex:0 0 60px}
+    .t-thumb img{width:100%;height:100%;object-fit:cover}
+    .t-title{font-weight:800}
+    .t-sub{color:var(--muted);font-size:13px}
+    .t-actions{margin-left:auto}
+
+    .right{display:flex;flex-direction:column;gap:16px}
+    .artist{display:flex;gap:12px;align-items:center;background:var(--panel);padding:12px;border-radius:12px}
+    .artist-photo{width:88px;height:88px;border-radius:10px;overflow:hidden}
+    .artist-photo img{width:100%;height:100%;object-fit:cover}
+    .stack{background:var(--panel);padding:12px;border-radius:12px;min-height:260px;position:relative;overflow:hidden}
+    .stack-list{display:flex;flex-direction:column;gap:12px;overflow:auto;height:220px;padding-right:8px}
+
+    footer{color:var(--muted);margin-top:8px;font-size:13px}
+
+    .wrap{padding:40px}
+    .left{padding:28px}
+    @media(max-width:980px){
+  main{grid-template-columns:1fr}
+  .tracks{grid-template-columns:repeat(2,1fr)}
+  .cover{width:120px;height:120px}
+}
+
+.platforms-card {
+  background: var(--panel);
+  padding: 16px;
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.platforms-card strong {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.platforms-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.platforms-stack a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  padding: 10px 12px;
+  text-decoration: none;
+  color: var(--text);
+  transition: 0.3s ease;
+}
+
+.platforms-stack a:hover {
+  transform: translateX(6px);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.platform-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.platform-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  filter: brightness(1.1) contrast(1.2) drop-shadow(0 0 6px rgba(255,255,255,0.05));
+  transition: 0.3s ease;
+}
+
+.platforms-stack span {
+  font-weight: 600;
+  font-size: 15px;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.platforms-stack a.spotify:hover span {
+  color: rgb(30, 215, 96);
+  text-shadow: 0 0 10px rgba(30, 215, 96, 0.8);
+}
+.platforms-stack a.ytmusic:hover span {
+  color: rgb(255, 60, 60);
+  text-shadow: 0 0 10px rgba(255, 60, 60, 0.8);
+}
+.platforms-stack a.apple:hover span {
+  color: rgb(255, 100, 150);
+  text-shadow: 0 0 10px rgba(255, 100, 150, 0.8);
+}
+.platforms-stack a.amazon:hover span {
+  color: rgb(0, 200, 255);
+  text-shadow: 0 0 10px rgba(0, 200, 255, 0.8);
+}
+.volume-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 180px;
+  margin-left: 8px;
+}
+
+.volume-control input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #6fe8ff 0%, #c47bff 90%);
+  outline: none;
+  cursor: pointer;
+  margin: 0;
+}
+
+.volume-control input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #6fe8ff;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.volume-control input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  background: #6fe8ff;
+}
+
+.volume-control input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #6fe8ff;
+  cursor: pointer;
+}
+
+.volume-markers {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 4px;
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 600;
+}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden>
+          <a href="artist.jpg" style="display:block;width:100%;height:100%;text-decoration:none;">
+            <img src="artist.jpg" alt="Logo">
+          </a>
+        </div>
+        <div>
+          <h1>Rainy Hell — Official Distributor</h1>
+          <div class="sub">Audio drops to Apple Music, Amazon Music, TikTok Audio, CapCut, Spotify, YouTube Music</div>
+        </div>
+      </div>
+      <nav>
+      </nav>
+    </header>
+
+    <main>
+      <section class="left" aria-label="Player and tracks">
+        <div class="player-row">
+          <div class="cover"><img id="now-cover" src="rainyhell.jpg" alt="cover"></div>
+
+          <div class="meta">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+              <div style="flex:1">
+                <h2 id="now-title">Rainy Hell</h2>
+                <p id="now-artist" class="sub">Rainy Hell • Apple Music, Spotify, TikTok, CapCut, Amazon, YouTube</p>
+              </div>
+              <div id="followers-widget" style="display:inline-flex;align-items:center;gap:12px;font-family:Inter,system-ui,Arial;">
+              <div style="display:flex;flex-direction:column;align-items:flex-start">
+              <div style="font-size:13px;color:#9fb1c9">Followers</div>
+              <div id="followers-count" aria-live="polite" style="font-weight:800;font-size:20px;color:#e9f3ff">—</div>
+              <div id="followers-updated" style="font-size:11px;color:#7f98b2;margin-top:4px">last: —</div>
+              </div>
+             </div>
+            </div>
+
+            <div class="controls">
+              <div class="control-top">
+                <button id="prev" class="big-btn" title="Previous">◀◀</button>
+                <button id="play" class="big-btn" title="Play / Pause">▶</button>
+                <button id="next" class="big-btn" title="Next">▶▶</button>
+
+                <div style="display:flex;flex-direction:column;margin-left:14px;flex:1">
+                  <div style="display:flex;gap:8px;align-items:center">
+                    <div class="player-info">
+                      <div style="font-weight:800" id="play-state">Paused</div>
+                    </div>
+
+                    <a id="download-now" class="small-btn" href="rainyhell.mp3" download>Download</a>
+                    <div class="volume-control">
+                    <input id="volume" type="range" min="0" max="1" step="0.01" value="0.9">
+                    <div class="volume-markers">
+                    <span>0%</span>
+                    <span>25%</span>
+                    <span>50%</span>
+                    <span>75%</span>
+                    <span>100%</span>
+                    </div>
+                  </div>
+                  </div>
+                  <div class="progress-wrap">
+                    <div class="time-row"><span id="cur-time">0:00</span><span id="dur-time">0:00</span></div>
+                    <div class="progress" id="progress"><div class="bar" id="progress-bar"></div></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="viz">
+                <canvas class="viz-canvas" id="viz"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tracks" id="tracks" aria-label="Track list">
+        </div>
+      </section>
+
+      <aside class="right">
+        <div class="artist">
+          <div class="artist-photo"><img id="artist-photo" src="artist.jpg" alt="artist"></div>
+          <div>
+            <h3 id="artist-name">Rainy Hell</h3>
+            <div class="sub">Distributor • Audio-first • Drops across major platforms</div>
+          </div>
+        </div>
+
+<div class="platforms-card">
+  <strong>Available On</strong>
+  <div class="platforms-stack">
+    <a href="https://spotify.com/artist-link" class="spotify" target="_blank">
+      <div class="platform-icon">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg" alt="Spotify">
+      </div>
+      <span>Spotify</span>
+    </a>
+
+    <a href="https://music.youtube.com/artist-link" class="ytmusic" target="_blank">
+      <div class="platform-icon">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Youtube_Music_icon.svg/512px-Youtube_Music_icon.svg.png" alt="YouTube Music">
+      </div>
+      <span>YouTube Music</span>
+    </a>
+
+    <a href="https://music.apple.com/artist-link" class="apple" target="_blank">
+      <div class="platform-icon">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Apple_Music_icon.svg/2048px-Apple_Music_icon.svg.png" alt="Apple Music">
+      </div>
+      <span>Apple Music</span>
+    </a>
+
+    <a href="https://amazon.com/artist-link" class="amazon" target="_blank">
+      <div class="platform-icon">
+        <img src="https://lilychiam.com/wp-content/uploads/2024/09/amazon-music-logo.webp" alt="Amazon Music">
+      </div>
+      <span>Amazon Music</span>
+    </a>
+  </div>
+</div>
+
+      </aside>
+    </main>
+
+    <footer>© <strong>Rainy Hell</strong> — Official Distributor (2025) • Instrumental music only • Pixie is a foundation, not music for everyday listening. • Version 24.06</footer>
+  </div>
+
+<script>
+// ======= Data =======
+const tracks = [
+  { title: "Rainy Hell", artist: "Rainy Hell", cover: "Music/Rainy_Hell/Rainy_Hell.jpg", src: "Music/Rainy_Hell/Rainy_Hell.mp3", desc: "Calm Music for the Road Trip" },
+  { title: "Pixie", artist: "Rainy Hell", cover: "Music/Pixie/pixie.jpg", src: "Music/Pixie/pixie.mp3", desc: "Good old music from 2001, find out the Windows XP beats" },
+  { title: "Doogloom", artist: "Rainy Hell", cover: "Music/Doogloom/Doogloom.jpg", src: "Music/Doogloom/Doogloom.mp3", desc: "Song from the game 2023" }
+];
+
+let currentIndex = 0;
+let isPlaying = false;
+
+const audio = new Audio();
+const playBtn = document.getElementById("play");
+const prevBtn = document.getElementById("prev");
+const nextBtn = document.getElementById("next");
+const curTimeEl = document.getElementById("cur-time");
+const durTimeEl = document.getElementById("dur-time");
+const progressBar = document.getElementById("progress-bar");
+const progressWrap = document.getElementById("progress");
+const nowTitle = document.getElementById("now-title");
+const nowArtist = document.getElementById("now-artist");
+const nowCover = document.getElementById("now-cover");
+const playState = document.getElementById("play-state");
+const playDesc = document.getElementById("play-desc");
+const volumeSlider = document.getElementById("volume");
+const tracksContainer = document.getElementById("tracks");
+const downloadBtn = document.getElementById("download-now");
+const rawUrl = 'https://raw.githubusercontent.com/Mavox-ID/Rainy_Hell/refs/heads/main/fow';
+const intervalMs = 1000;
+
+const elCount = document.getElementById('followers-count');
+const elUpdated = document.getElementById('followers-updated');
+
+let lastValue = null;
+
+const canvas = document.getElementById("viz");
+const ctx = canvas.getContext("2d");
+let audioCtx, analyser, source, dataArray;
+
+function formatFollowers(n) {
+  if (n >= 1e9) return (n / 1e9).toFixed(1).replace(/\.0$/, '') + 'B';
+  if (n >= 1e6) return (n / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
+  if (n >= 1e3) return (n / 1e3).toFixed(1).replace(/\.0$/, '') + 'K';
+  return String(n);
+}
+
+function pulseUpdate(el) {
+  el.style.transition = 'transform 180ms ease, opacity 180ms';
+  el.style.transform = 'scale(0.96)';
+  el.style.opacity = '0.6';
+  setTimeout(() => {
+    el.style.transform = '';
+    el.style.opacity = '';
+  }, 180);
+}
+
+async function fetchFollowersOnce() {
+  try {
+    const resp = await fetch(rawUrl + '?t=' + Date.now(), { cache: 'no-store' });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const text = (await resp.text()).trim();
+
+    const match = text.match(/-?\d+/);
+    if (!match) throw new Error('no number in file');
+
+    const num = parseInt(match[0], 10);
+    if (Number.isNaN(num)) throw new Error('parse failed');
+
+    if (lastValue === null || num !== lastValue) {
+      lastValue = num;
+      elCount.textContent = formatFollowers(num);
+      pulseUpdate(elCount);
+    }
+
+    const now = new Date();
+    elUpdated.textContent = 'last: ' + now.toLocaleTimeString();
+  } catch (err) {
+    console.error('Followers fetch error:', err);
+    elCount.textContent = '—';
+    elUpdated.textContent = 'last: error';
+  }
+}
+
+function setupVisualizer() {
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  analyser = audioCtx.createAnalyser();
+  source = audioCtx.createMediaElementSource(audio);
+  source.connect(analyser);
+  analyser.connect(audioCtx.destination);
+  analyser.fftSize = 64;
+  const bufferLength = analyser.frequencyBinCount;
+  dataArray = new Uint8Array(bufferLength);
+}
+
+function drawVisualizer() {
+  requestAnimationFrame(drawVisualizer);
+  analyser.getByteFrequencyData(dataArray);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  const barWidth = (canvas.width / dataArray.length) * 0.6;
+  const barGap = (canvas.width / dataArray.length) * 0.4;
+
+  for (let i = 0; i < dataArray.length; i++) {
+    const barHeight = (dataArray[i] / 255) * canvas.height;
+    const x = i * (barWidth + barGap);
+    const y = canvas.height - barHeight;
+    ctx.fillStyle = `rgba(111,232,255,0.8)`;
+    ctx.beginPath();
+    ctx.roundRect(x, y, barWidth, barHeight, barWidth / 2);
+    ctx.fill();
+  }
+}
+
+CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+  if (w < 2 * r) r = w / 2;
+  if (h < 2 * r) r = h / 2;
+  this.beginPath();
+  this.moveTo(x + r, y);
+  this.arcTo(x + w, y, x + w, y + h, r);
+  this.arcTo(x + w, y + h, x, y + h, r);
+  this.arcTo(x, y + h, x, y, r);
+  this.arcTo(x, y, x + w, y, r);
+  this.closePath();
+  return this;
+};
+
+function loadTrack(index) {
+  const track = tracks[index];
+  audio.src = track.src;
+  nowTitle.textContent = track.title;
+  nowArtist.textContent = `${track.artist} • ${track.desc}`;
+  nowCover.src = track.cover;
+  playDesc.textContent = track.desc;
+  playState.textContent = "Paused";
+  progressBar.style.width = "0%";
+  isPlaying = false;
+  playBtn.textContent = "▶";
+
+  downloadBtn.href = track.src;
+  downloadBtn.download = track.title + ".mp3";
+}
+
+audio.addEventListener("ended", () => {
+  isPlaying = false;
+  playBtn.textContent = "↺";
+  playState.textContent = "Paused";
+});
+
+function playPause() {
+  if (!audioCtx) setupVisualizer();
+
+  if (playBtn.textContent === "↺") {
+    audio.currentTime = 0;
+    audio.play();
+    isPlaying = true;
+    playBtn.textContent = "◼︎";
+    playState.textContent = "Playing";
+
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+    drawVisualizer();
+    return;
+  }
+
+  if (isPlaying) {
+    audio.pause();
+    isPlaying = false;
+    playBtn.textContent = "▶";
+    playState.textContent = "Paused";
+  } else {
+    audioCtx.resume().then(() => {
+      audio.play();
+      isPlaying = true;
+      playBtn.textContent = "◼︎";
+      playState.textContent = "Playing";
+
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      drawVisualizer();
+    });
+  }
+}
+
+function nextTrack() { currentIndex = (currentIndex + 1) % tracks.length; loadTrack(currentIndex); playPause(); }
+function prevTrack() { currentIndex = (currentIndex - 1 + tracks.length) % tracks.length; loadTrack(currentIndex); playPause(); }
+
+function formatTime(sec) { const m = Math.floor(sec/60); const s = Math.floor(sec%60).toString().padStart(2,'0'); return `${m}:${s}`; }
+
+playBtn.addEventListener("click", playPause);
+nextBtn.addEventListener("click", nextTrack);
+prevBtn.addEventListener("click", prevTrack);
+
+audio.addEventListener("timeupdate", () => {
+  progressBar.style.width = `${(audio.currentTime/audio.duration)*100}%`;
+  curTimeEl.textContent = formatTime(audio.currentTime);
+  durTimeEl.textContent = formatTime(audio.duration || 0);
+});
+
+progressWrap.addEventListener("click", (e) => {
+  const width = progressWrap.clientWidth;
+  audio.currentTime = (e.offsetX / width) * audio.duration;
+});
+
+volumeSlider.addEventListener("input", e => audio.volume = e.target.value);
+
+function renderTracks() {
+  tracksContainer.innerHTML = "";
+  tracks.forEach((t, idx) => {
+    const div = document.createElement("div");
+    div.className = "track";
+    div.innerHTML = `<div class="t-thumb"><img src="${t.cover}" alt="${t.title}"></div>
+                     <div><div class="t-title">${t.title}</div><div class="t-sub">${t.artist}</div></div>`;
+    div.addEventListener("click", () => { currentIndex = idx; loadTrack(currentIndex); playPause(); });
+    tracksContainer.appendChild(div);
+  });
+}
+
+renderTracks();
+loadTrack(currentIndex);
+fetchFollowersOnce();
+setInterval(fetchFollowersOnce, intervalMs);
+</script>
+</body>
+</html>
