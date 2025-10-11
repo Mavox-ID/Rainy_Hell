@@ -406,7 +406,7 @@ const playDesc = document.getElementById("play-desc");
 const volumeSlider = document.getElementById("volume");
 const tracksContainer = document.getElementById("tracks");
 const downloadBtn = document.getElementById("download-now");
-const rawUrl = 'https://github.com/Mavox-ID/Rainy_Hell/blob/main/fow.txt';
+const rawUrl = 'https://raw.githubusercontent.com/Mavox-ID/Rainy_Hell/refs/heads/main/fow.txt';
 const intervalMs = 1000;
 
 const elCount = document.getElementById('followers-count');
@@ -418,34 +418,33 @@ const canvas = document.getElementById("viz");
 const ctx = canvas.getContext("2d");
 let audioCtx, analyser, source, dataArray;
 
-function formatFollowers(n) {
-  if (n >= 1e9) return (n / 1e9).toFixed(1).replace(/\.0$/, '') + 'B';
-  if (n >= 1e6) return (n / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
-  if (n >= 1e3) return (n / 1e3).toFixed(1).replace(/\.0$/, '') + 'K';
-  return String(n);
-}
-
-function pulseUpdate(el) {
-  el.style.transition = 'transform 180ms ease, opacity 180ms';
-  el.style.transform = 'scale(0.96)';
-  el.style.opacity = '0.6';
-  setTimeout(() => {
-    el.style.transform = '';
-    el.style.opacity = '';
-  }, 180);
-}
-
 async function fetchFollowersOnce() {
   try {
     const resp = await fetch(rawUrl + '?t=' + Date.now(), { cache: 'no-store' });
-    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+
+    if (!resp.ok) {
+      console.error(`HTTP error: ${resp.status} ${resp.statusText}`);
+      throw new Error(`HTTP ${resp.status}`);
+    }
+
     const text = (await resp.text()).trim();
 
+    if (!text) {
+      console.error('File is empty');
+      throw new Error('empty file');
+    }
+
     const match = text.match(/-?\d+/);
-    if (!match) throw new Error('no number in file');
+    if (!match) {
+      console.error('No numeric value found in file:', text);
+      throw new Error('no number in file');
+    }
 
     const num = parseInt(match[0], 10);
-    if (Number.isNaN(num)) throw new Error('parse failed');
+    if (Number.isNaN(num)) {
+      console.error('Failed to parse number from:', match[0]);
+      throw new Error('parse failed');
+    }
 
     if (lastValue === null || num !== lastValue) {
       lastValue = num;
@@ -455,9 +454,9 @@ async function fetchFollowersOnce() {
 
     const now = new Date();
     elUpdated.textContent = 'last: ' + now.toLocaleTimeString();
+
   } catch (err) {
     console.error('Followers fetch error:', err);
-    elCount.textContent = '—';
     elUpdated.textContent = 'last: error';
   }
 }
@@ -511,7 +510,6 @@ function loadTrack(index) {
   nowTitle.textContent = track.title;
   nowArtist.textContent = `${track.artist} • ${track.desc}`;
   nowCover.src = track.cover;
-  playDesc.textContent = track.desc;
   playState.textContent = "Paused";
   progressBar.style.width = "0%";
   isPlaying = false;
