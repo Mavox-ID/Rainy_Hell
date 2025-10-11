@@ -248,6 +248,35 @@
   color: var(--muted);
   font-weight: 600;
 }
+    
+@media (max-width: 820px), (pointer: coarse) {
+  html, body { font-size: 15px; }
+  .wrap { padding: 18px; margin: 16px auto; gap: 14px; }
+  main { grid-template-columns: 1fr !important; gap: 14px; }
+  .left { padding: 18px; border-radius: 12px; }
+  .cover { width: 120px; height: 120px; flex: 0 0 120px; }
+  .meta h2 { font-size: 18px; }
+  .controls { gap: 10px; }
+  .big-btn { width: 48px; height: 48px; border-radius: 12px; font-size: 14px; }
+  .small-btn { padding: 8px 10px; font-size: 13px; }
+  .tracks { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .stack { min-height: 180px; }
+  .platforms-card { padding: 12px; }
+  .volume-control { width: 140px; }
+
+  button, .small-btn, .track { touch-action: manipulation; -webkit-tap-highlight-color: rgba(0,0,0,0.05); }
+
+  .progress { height: 10px; }
+
+  footer { font-size: 12px; text-align: center; }
+}
+
+body.is-phone {
+  --max: 800px;
+}
+
+body.is-phone .big-btn { box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+body.is-phone .meta { gap: 6px; }
     }
   </style>
 </head>
@@ -603,6 +632,55 @@ renderTracks();
 loadTrack(currentIndex);
 fetchFollowersOnce();
 setInterval(fetchFollowersOnce, intervalMs);
+
+
+(function () {
+  function detectPhone() {
+    try {
+      if (navigator.userAgentData) {
+        const brands = navigator.userAgentData.mobile;
+        if (typeof brands === 'boolean') return brands;
+      }
+    } catch (e) {}
+
+    if (window.matchMedia && window.matchMedia("(max-width: 820px)").matches) return true;
+
+    if (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) return true;
+
+    const ua = (navigator.userAgent || "").toLowerCase();
+    const phones = ["iphone","ipad","ipod","android","mobile","phone","blackberry","windows phone","opera mini"];
+    for (const p of phones) {
+      if (ua.indexOf(p) !== -1) return true;
+    }
+
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) return true;
+
+    return false;
+  }
+
+  function applyPhoneClass() {
+    const isPhone = detectPhone();
+    if (isPhone) document.body.classList.add('is-phone');
+    else document.body.classList.remove('is-phone');
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyPhoneClass);
+  } else {
+    applyPhoneClass();
+  }
+
+  window.addEventListener('resize', debounce(applyPhoneClass, 180));
+  window.addEventListener('orientationchange', debounce(applyPhoneClass, 300));
+
+  function debounce(fn, ms) {
+    let t;
+    return function () {
+      clearTimeout(t);
+      t = setTimeout(() => fn.apply(this, arguments), ms);
+    };
+  }
+})();
 </script>
 </body>
 </html>
